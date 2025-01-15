@@ -84,6 +84,7 @@ if (
   email === process.env.ADMIN_EMAIL &&
   password === process.env.ADMIN_PASSWORD
 ) {
+  console.log(process.env.process.env.ADMIN_EMAIL);
 
 const token = jwt.sign(email + password, process.env.JWT_SECRET);
 
