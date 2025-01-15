@@ -1,10 +1,50 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {assets} from '../assets/assets'
+import { AdminContext } from '../context/AdminContext'
+
+// const { setAToken, backendUrl } = useContext(AdminContext);
+import axios from 'axios'
 const Login = () => {
 const[state,setState]=useState('Admin')
 
+const[email,setEmail]=useState('')
+const[password,setPassword]=useState('')
+
+const{setAToken,backendurl}=useContext(AdminContext)
+const onSubmitHandler=async(event)=>
+{
+  event.preventDefault();
+
+  try{
+    if(state==='Admin')
+    {
+      const {data}=await axios.post(backendurl+'/api/admin/login',{
+        email,password
+      })
+
+      if(data.success)
+      {
+
+        localStorage.setItem('aToken',data.token);
+     setAToken(data.token);
+      }
+      else{
+       toast.error(data.message)
+      }
+    }
+    else{
+      
+    }
+  }
+
+  catch(error)
+  {
+    
+  }
+}
   return (
-    <form className="min-h-[80vh] flex items-center">
+    <form onSubmit={onSubmitHandler}
+    className="min-h-[80vh] flex items-center">
       <div
         className="flex flex-col items-start gap-3 p-8 m-auto min-w-[340px] sm:min-w-96 border rounded-xl 
       text-[#5E5E5E] text-sm shadow-lg"
@@ -19,6 +59,9 @@ const[state,setState]=useState('Admin')
             type="email"
             required
             className="border border-[#DADADA] rounded w-full p-2 mt-1"
+            onChange={(e) => setEmail(e.target.value)}
+
+            value={email}
           />
         </div>
         <div className="w-full">
@@ -27,6 +70,9 @@ const[state,setState]=useState('Admin')
             type="password"
             className="border border-[#DADADA] rounded w-full p-2 mt-1"
             required
+            onChange={(e) => setPassword(e.target.value)}
+
+            value={password}
           />
         </div>
 
